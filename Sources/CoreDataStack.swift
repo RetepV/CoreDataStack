@@ -294,8 +294,13 @@ public extension CoreDataStack {
 
                             // Remove journal files if present
                             // Eat the error because different versions of SQLite might have different journal files
-                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm")!)
-                            let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal")!)
+                            #if swift(>=2.3)
+                                let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm")!)
+                                let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal")!)
+                            #else
+                                let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-shm"))
+                                let _ = try? fm.removeItemAtURL(storeURL.URLByAppendingPathComponent("-wal"))
+                            #endif
                         }
                     }
                 } catch let resetError {
