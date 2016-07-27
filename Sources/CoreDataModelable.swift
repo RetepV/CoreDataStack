@@ -124,8 +124,13 @@ extension CoreDataModelable where Self: NSManagedObject {
         fetchReqeust.includesSubentities = false
         fetchReqeust.predicate = predicate
         var error: NSError? = nil
-        let count = context.countForFetchRequest(fetchReqeust, error: &error)
-        if let error = error { throw error }
+        var count: Int = NSNotFound
+        do {
+            count = try context.countForFetchRequest(fetchReqeust)
+        }
+        catch let error {
+            throw error
+        }
         guard count != NSNotFound else { return 0 }
         return count
     }
